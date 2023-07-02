@@ -21,40 +21,28 @@ public class UserRestController {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    // 회원가입
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody UserRequest.JoinDTO joinDTO) {
         User user = User.builder()
                 .email(joinDTO.getEmail())
                 .password(passwordEncoder.encode(joinDTO.getPassword()))
                 .username(joinDTO.getUsername())
-                .roles(Collections.singletonList("ROLE_USER"))
+                .roles("ROLE_USER")
                 .build();
 
-        try {
-            userRepository.save(user);
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("fail");
-        }
+        userRepository.save(user);
 
         return ResponseEntity.ok("ok");
     }
 
-    // 로그인
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserRequest.LoginDTO loginDTO) {
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
+                = new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword());
+        Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+        CustomUserDetails myUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        String jwt = JWTProvider.create(myUserDetails.getUser());
 
-        try {
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
-                    = new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword());
-            Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-            CustomUserDetails myUserDetails = (CustomUserDetails) authentication.getPrincipal();
-            String jwt = JWTProvider.create(myUserDetails.getUser());
-
-            return ResponseEntity.ok().header(JWTProvider.HEADER, jwt).body("ok");
-
-        } catch (Exception e){
-            return ResponseEntity.internalServerError().body("fail");
-        }
+        return ResponseEntity.ok().header(JWTProvider.HEADER, jwt).body("ok");
     }
 }

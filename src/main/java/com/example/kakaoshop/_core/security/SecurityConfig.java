@@ -22,18 +22,15 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 public class SecurityConfig {
 
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
 
     public class CustomSecurityFilterManager extends AbstractHttpConfigurer<CustomSecurityFilterManager, HttpSecurity> {
         @Override
@@ -44,36 +41,28 @@ public class SecurityConfig {
         }
     }
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // 1. CSRF 해제
         http.csrf().disable(); // postman 접근해야 함!! - CSR 할때!!
 
-
         // 2. iframe 거부
         http.headers().frameOptions().sameOrigin();
-
 
         // 3. cors 재설정
         http.cors().configurationSource(configurationSource());
 
-
         // 4. jSessionId 사용 거부
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
 
         // 5. form 로긴 해제 (UsernamePasswordAuthenticationFilter 비활성화)
         http.formLogin().disable();
 
-
         // 6. 로그인 인증창이 뜨지 않게 비활성화
         http.httpBasic().disable();
 
-
         // 7. 커스텀 필터 적용 (시큐리티 필터 교환)
         http.apply(new CustomSecurityFilterManager());
-
 
         // 8. 인증 실패 처리
         http.exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
@@ -87,12 +76,13 @@ public class SecurityConfig {
         });
 
 
-        // 11. 인증, 권한 필터 설정
+        // 10. 인증, 권한 필터 설정
         http.authorizeRequests(
-                authorize -> authorize.antMatchers("/").authenticated()
+                authorize -> authorize.antMatchers("/carts/**", "/options/**", "/orders/**").authenticated()
+                        .antMatchers("/admin/**")
+                        .access("hasRole('ADMIN')")
                         .anyRequest().permitAll()
         );
-
 
         return http.build();
     }

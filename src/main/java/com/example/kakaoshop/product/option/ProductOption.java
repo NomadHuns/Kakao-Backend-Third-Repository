@@ -1,8 +1,10 @@
-package com.example.kakaoshop.option;
+package com.example.kakaoshop.product.option;
 
 import com.example.kakaoshop.product.Product;
-import lombok.*;
-
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -11,11 +13,11 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name="option_tb",
+@Table(name="product_option_tb",
         indexes = {
-                @Index(name = "option_product_id_idx", columnList = "product_id")
+                @Index(name = "product_option_product_id_idx", columnList = "product_id")
         })
-public class Option {
+public class ProductOption {
 
 
     @Id
@@ -33,7 +35,7 @@ public class Option {
 
 
     @Builder
-    public Option(int id, Product product, String optionName, int price) {
+    public ProductOption(int id, Product product, String optionName, int price) {
         this.id = id;
         this.product = product;
         this.optionName = optionName;
