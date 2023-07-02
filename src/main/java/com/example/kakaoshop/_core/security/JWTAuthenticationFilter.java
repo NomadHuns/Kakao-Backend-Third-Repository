@@ -28,7 +28,6 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String prefixJwt = request.getHeader(JWTProvider.HEADER);
 
-        System.out.println("나 실행안되냐? ");
         if (prefixJwt == null) {
             chain.doFilter(request, response);
             return;
