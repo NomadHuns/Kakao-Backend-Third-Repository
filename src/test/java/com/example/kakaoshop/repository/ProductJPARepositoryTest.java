@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -19,8 +20,7 @@ public class ProductJPARepositoryTest {
     private ProductJPARepository productJPARepository;
 
     @Test
-    void findAll() {
-
+    void findAll_test() {
         // when
         List<Product> productList = productJPARepository.findAll();
 
@@ -38,6 +38,24 @@ public class ProductJPARepositoryTest {
         Assertions.assertEquals(product.getProductName(), "[황금약단밤 골드]2022년산 햇밤 칼집밤700g외/군밤용/생율");
         Assertions.assertEquals(product.getImage(), "/images/2.jpg");
         Assertions.assertEquals(product.getPrice(), 2000);
+    }
+
+    @Test
+    void findById_test() {
+        // given
+        int id = 1;
+
+        // when
+        Optional<Product> productOP = productJPARepository.findById(id);
+
+        // verify
+
+        Product product = productOP.get();
+        Assertions.assertEquals(product.getId(), 1);
+        Assertions.assertEquals(product.getProductName(), "기본에 슬라이딩 지퍼백 크리스마스/플라워에디션 에디션 외 주방용품 특가전");
+        Assertions.assertEquals(product.getImage(), "/images/1.jpg");
+        Assertions.assertEquals(product.getPrice(), 1000);
+
     }
 
 }
