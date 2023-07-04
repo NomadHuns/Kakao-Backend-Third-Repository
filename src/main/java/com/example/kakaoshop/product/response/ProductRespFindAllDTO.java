@@ -1,5 +1,6 @@
 package com.example.kakaoshop.product.response;
 
+import com.example.kakaoshop.product.Product;
 import lombok.*;
 
 @Getter @Setter
@@ -12,11 +13,11 @@ public class ProductRespFindAllDTO {
     private int price;
 
     @Builder
-    public ProductRespFindAllDTO(int id, String productName, String description, String image, int price) {
-        this.id = id;
-        this.productName = productName;
-        this.description = description;
-        this.image = image;
-        this.price = price;
+    public ProductRespFindAllDTO(Product product) {
+        this.id = product.getId();
+        this.productName = product.getProductName();
+        this.description = product.getDescription();
+        this.image = product.getImage();
+        this.price = product.getPrice();
     }
 }
