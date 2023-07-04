@@ -19,13 +19,19 @@ spring:
       enabled: always
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     show-sql: true
     properties:
       hibernate:
         format_sql: true
       default_batch_fetch_size: 100
     open-in-view: false
+    # 테이블이 생성된 후 data.sql이 실행된다.
+    defer-datasource-initialization: true
+  sql:
+    init:
+      data-locations:
+        - classpath:db/data.sql
 
 logging:
   level:
