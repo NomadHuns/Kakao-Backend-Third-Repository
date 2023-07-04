@@ -46,13 +46,11 @@ public class ProductJPARepositoryTest {
         Optional<Product> productOP = productJPARepository.findById(id);
 
         // verify
-
         Product product = productOP.get();
         Assertions.assertEquals(product.getId(), 1);
         Assertions.assertEquals(product.getProductName(), "기본에 슬라이딩 지퍼백 크리스마스/플라워에디션 에디션 외 주방용품 특가전");
         Assertions.assertEquals(product.getImage(), "/images/1.jpg");
         Assertions.assertEquals(product.getPrice(), 1000);
-
     }
 
 }
