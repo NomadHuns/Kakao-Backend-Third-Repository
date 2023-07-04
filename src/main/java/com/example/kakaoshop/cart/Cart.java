@@ -1,6 +1,6 @@
 package com.example.kakaoshop.cart;
 
-import com.example.kakaoshop.product.option.ProductOption;
+import com.example.kakaoshop.product.option.Option;
 import com.example.kakaoshop.user.User;
 import lombok.*;
 
@@ -12,10 +12,10 @@ import javax.persistence.*;
 @Table(name="cart_tb",
         indexes = {
                 @Index(name = "cart_user_id_idx", columnList = "user_id"),
-                @Index(name = "cart_option_id_idx", columnList = "product_option_id")
+                @Index(name = "cart_option_id_idx", columnList = "option_id")
         },
         uniqueConstraints = {
-                @UniqueConstraint(name = "uk_cart_option_user", columnNames = {"user_id", "product_option_id"})
+                @UniqueConstraint(name = "uk_cart_option_user", columnNames = {"user_id", "option_id"})
         })
 public class Cart {
     @Id
@@ -26,7 +26,7 @@ public class Cart {
     private User user;
 
     @OneToOne(fetch = FetchType.LAZY)
-    private ProductOption productOption;
+    private Option option;
 
     @Column(nullable = false)
     private int quantity;
@@ -35,10 +35,10 @@ public class Cart {
     private int price;
 
     @Builder
-    public Cart(int id, User user, ProductOption productOption, int quantity, int price) {
+    public Cart(int id, User user, Option option, int quantity, int price) {
         this.id = id;
         this.user = user;
-        this.productOption = productOption;
+        this.option = option;
         this.quantity = quantity;
         this.price = price;
     }
